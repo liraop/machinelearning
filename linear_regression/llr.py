@@ -7,7 +7,7 @@ Created on Mon Aug 26 22:43:27 2019
 """
 
 from numpy import *
-
+import matplotlib.pyplot as plt
 
 def compute_errors(b, m, points):
     totalError = 0
@@ -34,13 +34,20 @@ def step_gradient(current_b , current_m, points, learningRate):
 def gradient_descent_runner(points, initial_b, initial_m, learning_rate, num_iterations):
     b = initial_b
     m = initial_m
+    x, y = [], []
     
     for i in range(num_iterations):
         b, m = step_gradient(b , m, array(points), learning_rate)
+        rss = compute_errors(b, m, points)
+        print("RSS = {0}".format(rss))
+        x.append(i)
+        y.append(rss)
+        
+    plt.plot(x, y)
     return [b, m]
 
 def run():
-    points = genfromtxt('./data/income.csv', delimiter=',')
+    points = genfromtxt('https://raw.githubusercontent.com/liraop/machinelearning/live_linear_regression/linear_regression/data/income.csv', delimiter=',')
     #hyperparameters 
     learning_rate = 0.00001
     #y = mx + b (slope formula)
@@ -48,7 +55,6 @@ def run():
     initial_m = 0
     num_iterations = 100
     [b, m] = gradient_descent_runner(points, initial_b, initial_m, learning_rate, num_iterations)
-    print(b, m)    
 
 if __name__ == '__main__':
    run() 
